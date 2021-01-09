@@ -1,0 +1,50 @@
+﻿@*@implements IDisposable;*@
+
+@using System.Globalization
+
+@inject NavigationManager navigationManager
+@inject IJSRuntime js
+
+@*@inject InteropSettings _interopSettings*@
+
+<strong>Culture:</strong>
+@*<p>Counter : @_interopSettings.Counter</p>*@
+
+<select @bind="culture">
+    @foreach (CultureInfo item in cultures)
+    {
+        <option value="@item">@item.DisplayName</option>
+    }
+</select>
+
+@code {
+    CultureInfo[] cultures = new[]
+    {
+        new CultureInfo("en-US"),
+        new CultureInfo("ar-EG"),
+        new CultureInfo("ar-SA"),
+    };
+    CultureInfo culture
+    {
+        //get => CultureInfo.CurrentCulture;   // Chnages Both content and $ Date Numbers
+        get => CultureInfo.CurrentCulture;   // Chnages only content
+        set
+        {
+            var jSInProcessRuntime = (IJSInProcessRuntime)js;
+            jSInProcessRuntime.InvokeVoid("setInLocalStorage", "culture", value.Name);
+            navigationManager.NavigateTo(navigationManager.Uri, true);
+
+            //CultureInfo.DefaultThreadCurrentCulture = value;
+            //CultureInfo.DefaultThreadCurrentUICulture = value;
+            //_interopSettings.SetCultureLanguage(value.Name, js);
+            //StateHasChanged();
+            //navigationManager.NavigateTo(navigationManager.Uri, true);
+        }
+    }
+
+    //protected override void OnInitialized() => _interopSettings.OnCultureChange += InvokeCultureStateHasChanged();
+
+    //public Action InvokeCultureStateHasChanged() => (() => InvokeAsync(() => StateHasChanged()));
+
+    //public void Dispose() => _interopSettings.OnCultureChange -= InvokeCultureStateHasChanged();
+}

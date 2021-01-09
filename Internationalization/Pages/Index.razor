@@ -1,0 +1,18 @@
+﻿@page "/"
+@inject IStringLocalizer<Resource> _localizer
+
+<h1>Main</h1>
+
+<p>@_localizer["name"]: @name</p>
+<p>@_localizer["email"]: @email</p>
+<p>@_localizer["date"]: @date</p>
+<p>@_localizer["date"]: @shortdate</p>
+<p>@_localizer["price"]: @price.ToString("C")</p>
+
+@code {
+    private decimal price = 1250.75m;
+    private string name = "Wael";
+    private string email = "wael@innotech.com.eg";
+    private string shortdate = DateTime.Now.ToString("dd/MM/yyy");
+    private string date = DateTime.Now.ToLongDateString();
+}
